@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registration | {{ parent() }}{% endblock %}
+
+{% block importmap %}
+   {# {{ importmap(['register']) }}#}
+{% endblock %}
+
+{% block body %}
+    <h1>Register </h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+    <div>
+        {{ form_row(registrationForm.nickName) }}
+    </div>
+    <div>
+        {{ form_row(registrationForm.email) }}
+    </div>
+    <div>
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password'
+        }) }}
+        <div>
+            <p>Password Complexity : <span id="entropy" class="text-red">Très faible</span> (The minimal complexity accepted is "Strong")</p>
+        </div>
+    </div>
+    <div>
+        {{ form_row(registrationForm.agreeTerms) }}
+    </div>
+
+    <button type="submit" class="btn" id="submit-button" disabled>Register</button>
+    {{ form_end(registrationForm) }}
+    <p>You have an account ? <a href="{{ path('app_login') }}">Connexion</a></p>
+{% endblock %}
