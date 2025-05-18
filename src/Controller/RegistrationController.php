@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Form\RegistrationForm;
+use App\Repository\UsersRepository;
 use App\Security\UsersAuthenticator;
 use App\Services\JwtService;
 use App\Services\SendEmailService;
@@ -81,5 +82,35 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+    }
+
+    #[Route('/verify/{token}', name: 'verify_user')]
+    public function verificateUser(
+        $token, JwtService $jwt,
+        UsersRepository $usersRepository, EntityManagerInterface $em
+    ): Response
+    {
+        // verify if the token is correct
+        if ($jwt->isValid($token) && !$jwt->isExpired($token)
+            && $jwt->check($token, $this->getParameter('app.jwtSecret'))
+        ) {
+            // the token is valide
+            $payload = $jwt->getPayload($token);
+
+            // get the current user
+            $user = $usersRepository->find($payload['userId']);
+
+            // verify if the user is not already activated
+            if($user && !$user->isVerified()) {
+                $user->setIsVerified(true);
+                $em->persist($user);
+                $em->flush();
+
+                $this->addFlash('success', 'Your account has been activated!');
+                return $this->redirectToRoute('app_main');
+            }
+        }
+        $this->addFlash('danger', 'token is invalid or expired!');
+        return $this->redirectToRoute('app_login');
     }
 }
