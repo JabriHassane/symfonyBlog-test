@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add a new Keyword | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <h1>Add a new Keyword</h1>
+    {{ form_start(keywordForm) }}
+    {{ form_row(keywordForm.name) }}
+    <button type="submit">Add</button>
+    {{ form_end(keywordForm) }}
+{% endblock %}

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a6f0f3c73f269f18db46d52ca8d09e7",
+    "content-hash": "e9697e9e690d2e5779649a8c167b77ee",
     "packages": [
         {
             "name": "composer/semver",
@@ -6331,16 +6331,16 @@
         },
         {
             "name": "symfony/stimulus-bundle",
-            "version": "v2.24.0",
+            "version": "v2.25.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stimulus-bundle.git",
-                "reference": "e09840304467cda3324cc116c7f4ee23c8ff227c"
+                "reference": "9954aeb3c807578cc8f3c2ffc31556ba21dda804"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/e09840304467cda3324cc116c7f4ee23c8ff227c",
-                "reference": "e09840304467cda3324cc116c7f4ee23c8ff227c",
+                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/9954aeb3c807578cc8f3c2ffc31556ba21dda804",
+                "reference": "9954aeb3c807578cc8f3c2ffc31556ba21dda804",
                 "shasum": ""
             },
             "require": {
@@ -6380,7 +6380,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.24.0"
+                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.25.1"
             },
             "funding": [
                 {
@@ -6396,7 +6396,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-09T21:10:04+00:00"
+            "time": "2025-05-19T07:20:25+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -6991,16 +6991,16 @@
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.24.0",
+            "version": "v2.25.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "22954300bd0b01ca46f17c7890ea15138d9cf67f"
+                "reference": "d9ad7cc258e8da152632dd157fea07d3af5737fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/22954300bd0b01ca46f17c7890ea15138d9cf67f",
-                "reference": "22954300bd0b01ca46f17c7890ea15138d9cf67f",
+                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/d9ad7cc258e8da152632dd157fea07d3af5737fe",
+                "reference": "d9ad7cc258e8da152632dd157fea07d3af5737fe",
                 "shasum": ""
             },
             "require": {
@@ -7069,7 +7069,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.24.0"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.25.1"
             },
             "funding": [
                 {
@@ -7085,7 +7085,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-04T17:29:20+00:00"
+            "time": "2025-05-19T07:20:25+00:00"
         },
         {
             "name": "symfony/validator",
