@@ -2,17 +2,192 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\MediaType;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ApiPlatform\OpenApi\Model\Response;
+use App\Controller\Security\LoginController;
+use App\Controller\Security\RegisterController;
+use App\Dto\loginDto\UserLoginInput;
+use App\Dto\loginDto\UserLoginOutput;
+use App\Dto\registrationDto\UserRegistrationInput;
+use App\Dto\registrationDto\UserRegistrationOutput;
 use App\Repository\UsersRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
+
+use function PHPSTORM_META\type;
+
+/* ------API resources------ */
+
+#[ApiResource(
+    operations: [
+        // Registration New User
+        new Post(
+            uriTemplate: '/register',
+            controller: RegisterController::class,
+            input: UserRegistrationInput::class,
+            output: UserRegistrationOutput::class,
+            security: null,  // null for public access
+            name: 'register',
+            description: 'Register a new user account',
+            deserialize: true,
+            validate: true,
+            write: false,
+            openapi: new Operation(
+                tags: ['Authentication'],
+                summary: 'Register a new user',
+                description: 'Creates a new user account with email and password, returns a JWT token for authentication.',
+                requestBody: new RequestBody(
+                    description: 'User registration data',
+                    content: new \ArrayObject([
+                        'application/json' => new MediaType(
+                            example: [
+                                'email' => 'john.doe@example.com',
+                                'password' => 'SecurePassword123!'
+                            ]
+                        )
+                    ])
+                ),
+                responses: [
+                    '201' => new Response(
+                        description: 'User registered successfully',
+                        content: new \ArrayObject([
+                            'application/json' => new MediaType(
+                                example: [
+                                    'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNzE4ODI0ODAwLCJleHAiOjE3MTg5MTEyMDB9.example-signature',
+                                    'user' => [
+                                        'id' => 1,
+                                        'email' => 'john.doe@example.com'
+                                    ]
+                                ]
+                            )
+                        ])
+                    ),
+                    '400' => new Response(
+                        description: 'Validation error',
+                        content: new \ArrayObject([
+                            'application/json' => new MediaType(
+                                example: [
+                                    'type' => 'https://tools.ietf.org/html/rfc2616#section-10',
+                                    'title' => 'An error occurred',
+                                    'detail' => 'email: This value is not a valid email address.',
+                                    'violations' => [
+                                        [
+                                            'propertyPath' => 'email',
+                                            'message' => 'This value is not a valid email address.',
+                                            'code' => 'bd79c0ab-ddba-46cc-a703-a7a4b08de310'
+                                        ]
+                                    ]
+                                ]
+                            )
+                        ])
+                    ),
+                    '409' => new Response(
+                        description: 'User already exists',
+                        content: new \ArrayObject([
+                            'application/json' => new MediaType(
+                                example: [
+                                    'type' => 'https://tools.ietf.org/html/rfc2616#section-10',
+                                    'title' => 'An error occurred',
+                                    'detail' => 'User with this email already exists'
+                                ]
+                            )
+                        ])
+                    )
+                ]
+            ),
+        ),
+
+        // Login JWT
+        new Post(
+            uriTemplate: '/login',
+            controller: LoginController::class,
+            input: UserLoginInput::class,
+            output: UserLoginOutput::class,
+            security: null,
+            name: 'login',
+            description: 'Authenticate user and get JWT token',
+            openapi: new Operation(
+                tags: ['Authentication'],
+                summary: 'User login',
+                description: 'Authenticates a user with email and password, returns a JWT token.',
+                requestBody: new RequestBody(
+                    description: 'User login credentials',
+                    content: new \ArrayObject([
+                        'application/json' => new MediaType(
+                            example: [
+                                'email'=>'testmail@exp.com',
+                                'password'=>'12345!'
+                            ]
+                        )
+                    ])
+                ),
+                responses: [
+                    '200' => new Response(
+                        description: 'Login successful',
+                        content: new \ArrayObject([
+                            'application/json' => new MediaType(
+                                example: [
+                                    'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNzE4ODI0ODAwLCJleHAiOjE3MTg4Mjg0MDB9.example-signature',
+                                    'user' => [
+                                        'id' => 1,
+                                        'email' => 'john.doe@example.com',
+                                        'roles' => ['ROLE_USER']
+                                    ],
+                                    'expiresAt' => 1718828400
+                                ]
+                            )
+                        ])
+                    ),
+                    '400' => new Response(
+                        description: 'Invalid credentials',
+                        content: new \ArrayObject([
+                            'application/json' => new MediaType(
+                                example: [
+                                    'type' => 'https://tools.ietf.org/html/rfc2616#section-10',
+                                    'title' => 'An error occurred',
+                                    'detail' => 'Invalid credentials'
+                                ]
+                            )
+                        ])
+                    ),
+                    '422' => new Response(
+                        description: 'Validation error',
+                        content: new \ArrayObject([
+                            'application/json' => new MediaType(
+                                example: [
+                                    'type' => 'https://tools.ietf.org/html/rfc2616#section-10',
+                                    'title' => 'An error occurred',
+                                    'detail' => 'email: This value is not a valid email address.',
+                                    'violations' => [
+                                        [
+                                            'propertyPath' => 'email',
+                                            'message' => 'This value is not a valid email address.',
+                                            'code' => 'bd79c0ab-ddba-46cc-a703-a7a4b08de310'
+                                        ]
+                                    ]
+                                ]
+                            )
+                        ])
+                    )
+                ]
+            ),
+            deserialize: true,
+            validate: true,
+            write: false
+        )
+    ]
+)]
+
+/* ------------------------ */
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_NICK_NAME', fields: ['nickName'])]
-#[UniqueEntity(fields: ['nickName'], message: 'There is already an account with this Nick name')]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -20,8 +195,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['user:read'])]
     #[ORM\Column(length: 180)]
-    private ?string $nickName = null;
+    private ?string $email = null;
 
     /**
      * @var list<string> The user roles
@@ -32,46 +208,23 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[Groups(['user:write'])]
     #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\Column]
-    private ?bool $isVerified = false;
-
-    /**
-     * @var Collection<int, Posts>
-     */
-    #[ORM\OneToMany(targetEntity: Posts::class, mappedBy: 'users', orphanRemoval: true)]
-    private Collection $posts;
-
-    /**
-     * @var Collection<int, Comments>
-     */
-    #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'users')]
-    private Collection $comments;
-
-    public function __construct()
-    {
-        $this->posts = new ArrayCollection();
-        $this->comments = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNickName(): ?string
+    public function getEmail(): ?string
     {
-        return $this->nickName;
+        return $this->email;
     }
 
-    public function setNickName(string $nickName): static
+    public function setEmail(string $email): static
     {
-        $this->nickName = $nickName;
+        $this->email = $email;
 
         return $this;
     }
@@ -83,7 +236,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->nickName;
+        return (string) $this->email;
     }
 
     /**
@@ -130,89 +283,5 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function isVerified(): ?bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Posts>
-     */
-    public function getPosts(): Collection
-    {
-        return $this->posts;
-    }
-
-    public function addPost(Posts $post): static
-    {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removePost(Posts $post): static
-    {
-        if ($this->posts->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getUsers() === $this) {
-                $post->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Comments>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comments $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comments $comment): static
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getUsers() === $this) {
-                $comment->setUsers(null);
-            }
-        }
-
-        return $this;
     }
 }

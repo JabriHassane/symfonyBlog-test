@@ -1,0 +1,139 @@
+array(8) {
+  ["choices"]=>
+  array(1) {
+    [0]=>
+    array(5) {
+      ["content_filter_results"]=>
+      array(4) {
+        ["hate"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+        ["self_harm"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+        ["sexual"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+        ["violence"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+      }
+      ["finish_reason"]=>
+      string(4) "stop"
+      ["index"]=>
+      int(0)
+      ["logprobs"]=>
+      NULL
+      ["message"]=>
+      array(4) {
+        ["annotations"]=>
+        array(0) {
+        }
+        ["content"]=>
+        string(159) "```json
+{
+    "spamPorcentage": 85.0,
+    "isSpam": true,
+    "reason": "The message content is nonsensical and uses random characters, typical of spam."
+}
+```"
+        ["refusal"]=>
+        NULL
+        ["role"]=>
+        string(9) "assistant"
+      }
+    }
+  }
+  ["created"]=>
+  int(1750170519)
+  ["id"]=>
+  string(38) "chatcmpl-BjRahEaxjm8gKJ0MbwV0f7rPaZiIj"
+  ["model"]=>
+  string(17) "gpt-4o-2024-08-06"
+  ["object"]=>
+  string(15) "chat.completion"
+  ["prompt_filter_results"]=>
+  array(1) {
+    [0]=>
+    array(2) {
+      ["prompt_index"]=>
+      int(0)
+      ["content_filter_results"]=>
+      array(4) {
+        ["hate"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+        ["self_harm"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+        ["sexual"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+        ["violence"]=>
+        array(2) {
+          ["filtered"]=>
+          bool(false)
+          ["severity"]=>
+          string(4) "safe"
+        }
+      }
+    }
+  }
+  ["system_fingerprint"]=>
+  string(13) "fp_ee1d74bde0"
+  ["usage"]=>
+  array(5) {
+    ["completion_tokens"]=>
+    int(46)
+    ["completion_tokens_details"]=>
+    array(4) {
+      ["accepted_prediction_tokens"]=>
+      int(0)
+      ["audio_tokens"]=>
+      int(0)
+      ["reasoning_tokens"]=>
+      int(0)
+      ["rejected_prediction_tokens"]=>
+      int(0)
+    }
+    ["prompt_tokens"]=>
+    int(267)
+    ["prompt_tokens_details"]=>
+    array(2) {
+      ["audio_tokens"]=>
+      int(0)
+      ["cached_tokens"]=>
+      int(0)
+    }
+    ["total_tokens"]=>
+    int(313)
+  }
+}
