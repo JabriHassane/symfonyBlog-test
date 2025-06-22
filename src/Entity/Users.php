@@ -30,29 +30,8 @@ use function PHPSTORM_META\type;
         new Post(
             uriTemplate: '/register',
             controller: RegisterController::class,
-            input: UserRegistrationInput::class,
-            output: UserRegistrationOutput::class,
-            security: null,  // null for public access
-            name: 'register',
-            description: 'Register a new user account',
-            deserialize: true,
-            validate: true,
-            write: false,
             openapi: new Operation(
                 tags: ['Authentication'],
-                summary: 'Register a new user',
-                description: 'Creates a new user account with email and password, returns a JWT token for authentication.',
-                requestBody: new RequestBody(
-                    description: 'User registration data',
-                    content: new \ArrayObject([
-                        'application/json' => new MediaType(
-                            example: [
-                                'email' => 'john.doe@example.com',
-                                'password' => 'SecurePassword123!'
-                            ]
-                        )
-                    ])
-                ),
                 responses: [
                     '201' => new Response(
                         description: 'User registered successfully',
@@ -99,34 +78,37 @@ use function PHPSTORM_META\type;
                             )
                         ])
                     )
-                ]
+                ],
+                summary: 'Register a new user',
+                description: 'Creates a new user account with email and password, returns a JWT token for authentication.',
+                requestBody: new RequestBody(
+                    description: 'User registration data',
+                    content: new \ArrayObject([
+                        'application/json' => new MediaType(
+                            example: [
+                                'email' => 'john.doe@example.com',
+                                'password' => 'SecurePassword123!'
+                            ]
+                        )
+                    ])
+                )
             ),
+            description: 'Register a new user account',
+            security: null,  // null for public access
+            input: UserRegistrationInput::class,
+            output: UserRegistrationOutput::class,
+            deserialize: true,
+            validate: true,
+            write: false,
+            name: 'register',
         ),
 
         // Login JWT
         new Post(
             uriTemplate: '/login',
             controller: LoginController::class,
-            input: UserLoginInput::class,
-            output: UserLoginOutput::class,
-            security: null,
-            name: 'login',
-            description: 'Authenticate user and get JWT token',
             openapi: new Operation(
                 tags: ['Authentication'],
-                summary: 'User login',
-                description: 'Authenticates a user with email and password, returns a JWT token.',
-                requestBody: new RequestBody(
-                    description: 'User login credentials',
-                    content: new \ArrayObject([
-                        'application/json' => new MediaType(
-                            example: [
-                                'email'=>'testmail@exp.com',
-                                'password'=>'12345!'
-                            ]
-                        )
-                    ])
-                ),
                 responses: [
                     '200' => new Response(
                         description: 'Login successful',
@@ -175,11 +157,29 @@ use function PHPSTORM_META\type;
                             )
                         ])
                     )
-                ]
+                ],
+                summary: 'User login',
+                description: 'Authenticates a user with email and password, returns a JWT token.',
+                requestBody: new RequestBody(
+                    description: 'User login credentials',
+                    content: new \ArrayObject([
+                        'application/json' => new MediaType(
+                            example: [
+                                'email'=>'testmail@exp.com',
+                                'password'=>'12345!'
+                            ]
+                        )
+                    ])
+                )
             ),
+            description: 'Authenticate user and get JWT token',
+            security: null,
+            input: UserLoginInput::class,
+            output: UserLoginOutput::class,
             deserialize: true,
             validate: true,
-            write: false
+            write: false,
+            name: 'login'
         )
     ]
 )]
